@@ -51,8 +51,6 @@
             const phonePattern = /^\+7-\d{3}-\d{3}-\d{2}-\d{2}$/;
             if (!phonePattern.test(phone)) {
                 alert('Введите корректный телефон в формате +7-xxx-xxx-xx-xx');
-                document.getElementById('phone').value = '';  // Очищаем поле телефона после ошибки
-                document.getElementById('phone').focus();  // Устанавливаем фокус на поле телефона
                 return;
             }
 
@@ -60,8 +58,6 @@
             const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailPattern.test(email)) {
                 alert('Введите корректный email');
-                document.getElementById('email').value = '';  // Очищаем поле email после ошибки
-                document.getElementById('email').focus();  // Устанавливаем фокус на поле email
                 return;
             }
 
@@ -69,11 +65,11 @@
             alert('Форма успешно отправлена!');
         });
 
-        // Убираем фокус с поля после нажатия "Enter" и даем возможность повторного ввода
+        // Очищаем только текст ошибки, но не фокусируемся на поле снова
         document.querySelectorAll('input').forEach(input => {
-            input.addEventListener('keydown', function(event) {
-                if (event.key === 'Enter') {
-                    input.blur();  // Убираем фокус, чтобы пользователь мог снова ввести
+            input.addEventListener('input', function() {
+                if (input.checkValidity()) {
+                    input.setCustomValidity("");
                 }
             });
         });
