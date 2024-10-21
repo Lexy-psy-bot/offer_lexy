@@ -31,9 +31,11 @@
             color: green;
             font-weight: bold;
         }
+        #phonePrefix {
+            display: inline-block;
+            padding-right: 5px;
+        }
     </style>
-    <!-- Подключаем библиотеку Inputmask -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/inputmask/5.0.7/inputmask.min.js"></script>
 </head>
 <body>
     <form id="donateForm">
@@ -42,44 +44,15 @@
         <label for="email">Email:</label><br>
         <input type="email" id="email" name="email" required><br>
         <label for="phone">Телефон:</label><br>
-        <input type="tel" id="phone" name="phone" required><br>
+        <div>
+            <span id="phonePrefix">+7</span>
+            <input type="tel" id="phone" name="phone" maxlength="10" pattern="\d{10}" placeholder="Введите 10 цифр" required><br>
+        </div>
         <button type="submit">Отправить</button>
         <div id="successMessage" class="success-message" style="display:none;">Форма успешно отправлена!</div>
     </form>
 
     <script>
-        // Применение маски на поле телефона
-        function applyPhoneMask() {
-            Inputmask({
-                mask: "+7 (999) 999-99-99",
-                clearIncomplete: true, // Очищает поле при неполном вводе
-                showMaskOnHover: false,
-                showMaskOnFocus: true,
-                onincomplete: function () {
-                    alert('Введите корректный телефон');
-                }
-            }).mask(document.getElementById('phone'));
-        }
-
-        // Функция для проверки и форматирования номера телефона
-        function formatPhoneNumber(phone) {
-            phone = phone.replace(/[^\d]/g, ''); // Убираем все символы кроме цифр
-
-            // Если телефон начинается с 9, автоматически добавляем +7
-            if (phone.startsWith('9')) {
-                phone = '+7' + phone;
-            } 
-            // Если начинается с 8, меняем на +7
-            else if (phone.startsWith('8')) {
-                phone = '+7' + phone.slice(1);
-            }
-
-            return phone;
-        }
-
-        // Инициализация маски на начальном этапе
-        applyPhoneMask();
-
         // Обработчик отправки формы
         document.getElementById('donateForm').addEventListener('submit', function(event) {
             event.preventDefault(); // Отключаем стандартное действие отправки формы
@@ -88,20 +61,14 @@
             let email = document.getElementById('email').value;
             let phone = document.getElementById('phone').value;
 
-            // Удаляем все символы кроме цифр для проверки
-            phone = phone.replace(/[^\d]/g, '');
-
-            // Приводим телефон в нужный формат
-            phone = formatPhoneNumber(phone);
-
-            // Проверяем формат телефона
-            const phonePattern = /^\+7\d{10}$/;
+            // Проверка телефона на 10 цифр
+            const phonePattern = /^\d{10}$/;
             if (!phonePattern.test(phone)) {
-                alert('Введите корректный телефон в формате +7 (999) 999-99-99 или 8 (999) 999-99-99');
+                alert('Введите корректный телефон, состоящий из 10 цифр.');
                 return;
             }
 
-            // Проверка email
+            // Проверка email на корректность
             const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailPattern.test(email)) {
                 alert('Введите корректный email');
@@ -111,11 +78,6 @@
             // Если все корректно, показываем сообщение об успешной отправке
             document.getElementById('successMessage').style.display = 'block';
             console.log('Форма успешно отправлена');
-        });
-
-        // Применение маски снова после автозаполнения с задержкой
-        window.addEventListener('DOMContentLoaded', function () {
-            setTimeout(applyPhoneMask, 100);
         });
     </script>
 </body>
