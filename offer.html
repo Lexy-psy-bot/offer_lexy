@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -67,6 +67,15 @@
 
             // Если всё корректно, можно отправлять данные
             alert('Форма успешно отправлена!');
+        });
+
+        // Убираем фокус с поля после нажатия "Enter" и даем возможность повторного ввода
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('keydown', function(event) {
+                if (event.key === 'Enter') {
+                    input.blur();  // Убираем фокус, чтобы пользователь мог снова ввести
+                }
+            });
         });
     </script>
 </body>
