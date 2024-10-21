@@ -33,9 +33,9 @@
         <label for="name">Имя:</label><br>
         <input type="text" id="name" name="name" required><br>
         <label for="email">Email:</label><br>
-        <input type="email" id="email" name="email" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"><br>
+        <input type="email" id="email" name="email" required><br>
         <label for="phone">Телефон:</label><br>
-        <input type="tel" id="phone" name="phone" required pattern="\+7-\d{3}-\d{3}-\d{2}-\d{2}"><br>
+        <input type="tel" id="phone" name="phone" required><br>
         <button type="submit">Отправить</button>
     </form>
 
@@ -66,12 +66,20 @@
             
             // Очищаем форму после успешной отправки
             document.getElementById('donateForm').reset();
+
+            // Устанавливаем фокус на первое поле для корректного повторного ввода
+            document.getElementById('name').focus();
         });
 
         // Добавляем событие на ввод в каждое поле для сброса состояния ошибок
         document.querySelectorAll('input').forEach(input => {
             input.addEventListener('input', function() {
                 input.setCustomValidity('');
+            });
+
+            // Добавляем фокусировку при клике на поле для предотвращения замороженного ввода
+            input.addEventListener('focus', function() {
+                input.select(); // Выделяем текст, если поле уже заполнено
             });
         });
     </script>
