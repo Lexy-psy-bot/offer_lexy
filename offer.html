@@ -1,5 +1,5 @@
 <!DOCTYPE html> 
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -51,6 +51,7 @@
             const phonePattern = /^\+7-\d{3}-\d{3}-\d{2}-\d{2}$/;
             if (!phonePattern.test(phone)) {
                 alert('Введите корректный телефон в формате +7-xxx-xxx-xx-xx');
+                document.getElementById('phone').value = '';  // Очищаем поле телефона после ошибки
                 return;
             }
 
@@ -58,20 +59,18 @@
             const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailPattern.test(email)) {
                 alert('Введите корректный email');
+                document.getElementById('email').value = '';  // Очищаем поле email после ошибки
                 return;
             }
 
-            // Если всё корректно, можно отправлять данные
+            // Если всё корректно, данные можно отправить в Telegram Web App
+            window.Telegram.WebApp.sendData(JSON.stringify({
+                name: name,
+                email: email,
+                phone: phone
+            }));
+            
             alert('Форма успешно отправлена!');
-        });
-
-        // Очищаем только текст ошибки, но не фокусируемся на поле снова
-        document.querySelectorAll('input').forEach(input => {
-            input.addEventListener('input', function() {
-                if (input.checkValidity()) {
-                    input.setCustomValidity("");
-                }
-            });
         });
     </script>
 </body>
