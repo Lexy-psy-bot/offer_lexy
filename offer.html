@@ -26,6 +26,11 @@
             border: none;
             border-radius: 5px;
         }
+        .success-message {
+            text-align: center;
+            color: green;
+            font-weight: bold;
+        }
     </style>
     <!-- Подключаем библиотеку Inputmask -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/inputmask/5.0.7/inputmask.min.js"></script>
@@ -39,6 +44,7 @@
         <label for="phone">Телефон:</label><br>
         <input type="tel" id="phone" name="phone" required><br>
         <button type="submit">Отправить</button>
+        <div id="successMessage" class="success-message" style="display:none;">Форма успешно отправлена!</div>
     </form>
 
     <script>
@@ -102,11 +108,12 @@
                 return;
             }
 
-            // Если все корректно, отображаем сообщение об успешной отправке
-            alert('Форма успешно отправлена! Номер телефона: ' + phone);
+            // Если все корректно, показываем сообщение об успешной отправке
+            document.getElementById('successMessage').style.display = 'block';
+            console.log('Форма успешно отправлена');
         });
 
-        // Применение маски снова при автозаполнении (с задержкой для обработки браузером)
+        // Применение маски снова после автозаполнения с задержкой
         window.addEventListener('DOMContentLoaded', function () {
             setTimeout(applyPhoneMask, 100);
         });
