@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>  
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -47,30 +47,36 @@
             const email = document.getElementById('email').value;
             const phone = document.getElementById('phone').value;
 
+            let hasError = false;
+
             // Проверка телефона на соответствие формату +7-xxx-xxx-xx-xx
             const phonePattern = /^\+7-\d{3}-\d{3}-\d{2}-\d{2}$/;
             if (!phonePattern.test(phone)) {
                 alert('Введите корректный телефон в формате +7-xxx-xxx-xx-xx');
-                return;
+                document.getElementById('phone').focus();  // Фокус на поле с ошибкой
+                hasError = true;
             }
 
             // Проверка email на соответствие формату
             const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailPattern.test(email)) {
                 alert('Введите корректный email');
-                return;
+                document.getElementById('email').focus();  // Фокус на поле с ошибкой
+                hasError = true;
             }
 
-            // Если всё корректно, можно отправлять данные
-            alert('Форма успешно отправлена!');
+            if (!hasError) {
+                // Если всё корректно, можно отправлять данные
+                alert('Форма успешно отправлена!');
+                // Очистка формы после успешной отправки
+                document.getElementById('donateForm').reset();
+            }
         });
 
-        // Очищаем только текст ошибки, но не фокусируемся на поле снова
+        // Очищаем ошибки валидации при изменении значения в полях
         document.querySelectorAll('input').forEach(input => {
             input.addEventListener('input', function() {
-                if (input.checkValidity()) {
-                    input.setCustomValidity("");
-                }
+                input.setCustomValidity("");  // Сбрасываем ошибку
             });
         });
     </script>
