@@ -35,47 +35,54 @@
         <label for="email">Email:</label><br>
         <input type="email" id="email" name="email" required><br>
         <label for="phone">Телефон:</label><br>
-        <input type="tel" id="phone" name="phone" required><br>
+        <input type="tel" id="phone" name="phone" placeholder="+7-___-___-__-__" required><br>
         <button type="submit">Отправить</button>
     </form>
 
     <script>
+        document.getElementById('phone').addEventListener('input', function(event) {
+            const phoneInput = event.target;
+            let value = phoneInput.value.replace(/\D/g, '');  // Удаляем все нечисловые символы
+
+            if (value.length > 0) {
+                value = '+7-' + value;
+            }
+
+            if (value.length > 6) {
+                value = value.slice(0, 6) + '-' + value.slice(6);
+            }
+
+            if (value.length > 10) {
+                value = value.slice(0, 10) + '-' + value.slice(10);
+            }
+
+            if (value.length > 13) {
+                value = value.slice(0, 13) + '-' + value.slice(13);
+            }
+
+            phoneInput.value = value;
+        });
+
         document.getElementById('donateForm').addEventListener('submit', function(event) {
             event.preventDefault();
 
             const name = document.getElementById('name').value;
             const email = document.getElementById('email').value;
-            let phone = document.getElementById('phone').value;
+            const phone = document.getElementById('phone').value;
 
-            // Убираем все нечисловые символы
-            phone = phone.replace(/\D/g, '');
-
-            // Преобразуем в формат +7-xxx-xxx-xx-xx
-            if (phone.length === 11) {
-                phone = '+7-' + phone.slice(1, 4) + '-' + phone.slice(4, 7) + '-' + phone.slice(7, 9) + '-' + phone.slice(9, 11);
-                document.getElementById('phone').value = phone;
-            } else {
-                alert('Введите корректный телефон. Ожидается 11 цифр.');
+            const phonePattern = /^\+7-\d{3}-\d{3}-\d{2}-\d{2}$/;
+            if (!phonePattern.test(phone)) {
+                alert('Введите корректный телефон в формате +7-xxx-xxx-xx-xx');
                 return;
             }
 
-            // Проверка email на соответствие формату
             const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailPattern.test(email)) {
                 alert('Введите корректный email');
                 return;
             }
 
-            // Если всё корректно, можно отправлять данные
-            alert('Форма успешно отправлена! Телефон: ' + phone);
-        });
-
-        document.querySelectorAll('input').forEach(input => {
-            input.addEventListener('input', function() {
-                if (input.checkValidity()) {
-                    input.setCustomValidity("");
-                }
-            });
+            alert('Форма успешно отправлена!');
         });
     </script>
 </body>
