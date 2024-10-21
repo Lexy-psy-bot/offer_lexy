@@ -31,17 +31,6 @@
             color: green;
             font-weight: bold;
         }
-        .phone-container {
-            display: flex;
-            align-items: center;
-        }
-        #phonePrefix {
-            padding-right: 5px;
-            font-weight: bold;
-        }
-        #phone {
-            width: calc(100% - 35px); /* Adjusting input width to account for the prefix */
-        }
     </style>
 </head>
 <body>
@@ -51,15 +40,26 @@
         <label for="email">Email:</label><br>
         <input type="email" id="email" name="email" required><br>
         <label for="phone">Телефон:</label><br>
-        <div class="phone-container">
-            <span id="phonePrefix">+7</span>
-            <input type="tel" id="phone" name="phone" maxlength="10" pattern="\d{10}" placeholder="Введите 10 цифр" required>
-        </div>
+        <input type="tel" id="phone" name="phone" value="+7" required><br> <!-- Поле сразу с +7 -->
         <button type="submit">Отправить</button>
         <div id="successMessage" class="success-message" style="display:none;">Форма успешно отправлена!</div>
     </form>
 
     <script>
+        // Добавляем +7 в начало телефона, если его нет
+        document.getElementById('phone').addEventListener('input', function() {
+            let phoneInput = document.getElementById('phone');
+            if (!phoneInput.value.startsWith('+7')) {
+                phoneInput.value = '+7'; // Не позволяем удалять +7
+            }
+        });
+
+        // При фокусе на поле телефона, курсор будет ставиться после "+7"
+        document.getElementById('phone').addEventListener('focus', function() {
+            let phoneInput = document.getElementById('phone');
+            phoneInput.setSelectionRange(phoneInput.value.length, phoneInput.value.length); // Устанавливаем курсор в конец
+        });
+
         // Обработчик отправки формы
         document.getElementById('donateForm').addEventListener('submit', function(event) {
             event.preventDefault(); // Отключаем стандартное действие отправки формы
@@ -68,10 +68,12 @@
             let email = document.getElementById('email').value;
             let phone = document.getElementById('phone').value;
 
-            // Проверка телефона: 10 цифр должны быть введены
-            const phonePattern = /^\d{10}$/;
-            if (!phonePattern.test(phone)) {
-                alert('Введите корректный телефон, состоящий из 10 цифр.');
+            // Убираем символы кроме цифр и префикса +7
+            let phoneCleaned = phone.replace(/[^0-9]/g, '');
+
+            // Проверка на корректность: после +7 должно быть ровно 10 цифр
+            if (phoneCleaned.length !== 11) {
+                alert('Введите корректный телефон в формате +7 и 10 цифр.');
                 return;
             }
 
@@ -84,7 +86,7 @@
 
             // Если все корректно, показываем сообщение об успешной отправке
             document.getElementById('successMessage').style.display = 'block';
-            console.log('Форма успешно отправлена с телефоном: +7' + phone);
+            console.log('Форма успешно отправлена с телефоном: ' + phone);
         });
     </script>
 </body>
