@@ -45,12 +45,17 @@
 
             const name = document.getElementById('name').value;
             const email = document.getElementById('email').value;
-            const phone = document.getElementById('phone').value;
+            let phone = document.getElementById('phone').value;
 
-            // Проверка телефона на соответствие формату +7-xxx-xxx-xx-xx
-            const phonePattern = /^\+7-\d{3}-\d{3}-\d{2}-\d{2}$/;
-            if (!phonePattern.test(phone)) {
-                alert('Введите корректный телефон в формате +7-xxx-xxx-xx-xx');
+            // Убираем все нечисловые символы
+            phone = phone.replace(/\D/g, '');
+
+            // Преобразуем в формат +7-xxx-xxx-xx-xx
+            if (phone.length === 11) {
+                phone = '+7-' + phone.slice(1, 4) + '-' + phone.slice(4, 7) + '-' + phone.slice(7, 9) + '-' + phone.slice(9, 11);
+                document.getElementById('phone').value = phone;
+            } else {
+                alert('Введите корректный телефон. Ожидается 11 цифр.');
                 return;
             }
 
@@ -61,25 +66,15 @@
                 return;
             }
 
-            // Сообщение об успешной отправке
-            alert('Форма успешно отправлена!');
-            
-            // Очищаем форму после успешной отправки
-            document.getElementById('donateForm').reset();
-
-            // Устанавливаем фокус на первое поле для корректного повторного ввода
-            document.getElementById('name').focus();
+            // Если всё корректно, можно отправлять данные
+            alert('Форма успешно отправлена! Телефон: ' + phone);
         });
 
-        // Добавляем событие на ввод в каждое поле для сброса состояния ошибок
         document.querySelectorAll('input').forEach(input => {
             input.addEventListener('input', function() {
-                input.setCustomValidity('');
-            });
-
-            // Добавляем фокусировку при клике на поле для предотвращения замороженного ввода
-            input.addEventListener('focus', function() {
-                input.select(); // Выделяем текст, если поле уже заполнено
+                if (input.checkValidity()) {
+                    input.setCustomValidity("");
+                }
             });
         });
     </script>
