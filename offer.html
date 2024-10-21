@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html>  
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -37,13 +37,20 @@
         <label for="email">Email:</label><br>
         <input type="email" id="email" name="email" required><br>
         <label for="phone">Телефон:</label><br>
-        <input type="tel" id="phone" name="phone" required><br>
+        <input type="tel" id="phone" name="phone" required maxlength="16"><br> <!-- Ограничение на длину символов -->
         <button type="submit">Отправить</button>
     </form>
 
     <script>
         // Добавляем маску к полю телефона
-        Inputmask("+7-999-999-99-99").mask(document.getElementById("phone"));
+        Inputmask({
+            mask: "+7-999-999-99-99",
+            showMaskOnHover: false,
+            showMaskOnFocus: true,
+            onincomplete: function () {
+                alert('Введите корректный телефон');
+            }
+        }).mask(document.getElementById("phone"));
 
         document.getElementById('donateForm').addEventListener('submit', function(event) {
             event.preventDefault();
