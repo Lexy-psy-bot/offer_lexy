@@ -1,4 +1,4 @@
-<!DOCTYPE html>  
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -33,9 +33,9 @@
         <label for="name">Имя:</label><br>
         <input type="text" id="name" name="name" required><br>
         <label for="email">Email:</label><br>
-        <input type="email" id="email" name="email" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" inputmode="email"><br>
+        <input type="email" id="email" name="email" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"><br>
         <label for="phone">Телефон:</label><br>
-        <input type="tel" id="phone" name="phone" required pattern="\+7-\d{3}-\d{3}-\d{2}-\d{2}" inputmode="tel"><br>
+        <input type="tel" id="phone" name="phone" required pattern="\+7-\d{3}-\d{3}-\d{2}-\d{2}"><br>
         <button type="submit">Отправить</button>
     </form>
 
@@ -43,22 +43,36 @@
         document.getElementById('donateForm').addEventListener('submit', function(event) {
             event.preventDefault();
 
-            const phone = document.getElementById('phone');
-            const email = document.getElementById('email');
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
 
-            if (!phone.checkValidity()) {
+            // Проверка телефона на соответствие формату +7-xxx-xxx-xx-xx
+            const phonePattern = /^\+7-\d{3}-\d{3}-\d{2}-\d{2}$/;
+            if (!phonePattern.test(phone)) {
                 alert('Введите корректный телефон в формате +7-xxx-xxx-xx-xx');
                 return;
             }
 
-            if (!email.checkValidity()) {
+            // Проверка email на соответствие формату
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailPattern.test(email)) {
                 alert('Введите корректный email');
                 return;
             }
 
-            // Если всё корректно, можно отправлять данные
+            // Сообщение об успешной отправке
             alert('Форма успешно отправлена!');
-            document.getElementById('donateForm').reset();  // Очищаем форму
+            
+            // Очищаем форму после успешной отправки
+            document.getElementById('donateForm').reset();
+        });
+
+        // Добавляем событие на ввод в каждое поле для сброса состояния ошибок
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('input', function() {
+                input.setCustomValidity('');
+            });
         });
     </script>
 </body>
