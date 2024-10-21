@@ -37,11 +37,23 @@
         <label for="email">Email:</label><br>
         <input type="email" id="email" name="email" required><br>
         <label for="phone">Телефон:</label><br>
-        <input type="tel" id="phone" name="phone" required><br> <!-- Убрали жесткое ограничение длины -->
+        <input type="tel" id="phone" name="phone" required><br>
         <button type="submit">Отправить</button>
     </form>
 
     <script>
+        function applyPhoneMask() {
+            Inputmask({
+                mask: "+7-999-999-99-99",
+                showMaskOnHover: false,
+                showMaskOnFocus: true,
+                clearIncomplete: true,  // Маска не появляется при неполном вводе
+                onincomplete: function () {
+                    alert('Введите корректный телефон');
+                }
+            }).mask(document.getElementById("phone"));
+        }
+
         // Функция для корректировки номера
         function formatPhoneNumber(phone) {
             // Если номер начинается с 9, добавляем +7
@@ -55,16 +67,12 @@
             return phone;
         }
 
-        // Добавляем маску к полю телефона
-        Inputmask({
-            mask: "+7-999-999-99-99",
-            showMaskOnHover: false,
-            showMaskOnFocus: true,
-            clearIncomplete: true, // Убирает маску, если ввод неполный
-            onincomplete: function () {
-                alert('Введите корректный телефон');
-            }
-        }).mask(document.getElementById("phone"));
+        // Применяем маску при загрузке страницы
+        applyPhoneMask();
+
+        document.getElementById('phone').addEventListener('input', function () {
+            applyPhoneMask(); // Применяем маску при каждом изменении, чтобы она не исчезала
+        });
 
         document.getElementById('donateForm').addEventListener('submit', function(event) {
             event.preventDefault();
@@ -95,6 +103,11 @@
 
             // Если всё корректно, можно отправлять данные
             alert('Форма успешно отправлена! Номер телефона: ' + phone);
+        });
+
+        // Применяем маску снова при автозаполнении (задержка необходима для обработки автозаполнения браузером)
+        window.addEventListener('DOMContentLoaded', function () {
+            setTimeout(applyPhoneMask, 100);
         });
     </script>
 </body>
