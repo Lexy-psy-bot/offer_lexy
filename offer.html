@@ -42,29 +42,28 @@
     </form>
 
     <script>
+        // Применение маски на поле телефона
         function applyPhoneMask() {
-            const phoneInput = document.getElementById('phone');
-            
             Inputmask({
-                mask: "+7 (999) 999-99-99",  // Более гибкая маска с пробелами и скобками
-                clearIncomplete: true, // Маска сбрасывается, если неполный ввод
+                mask: "+7 (999) 999-99-99",
+                clearIncomplete: true, // Очищает поле при неполном вводе
                 showMaskOnHover: false,
                 showMaskOnFocus: true,
                 onincomplete: function () {
                     alert('Введите корректный телефон');
                 }
-            }).mask(phoneInput);
+            }).mask(document.getElementById('phone'));
         }
 
-        // Функция для корректировки номера перед отправкой
+        // Функция для проверки и форматирования номера телефона
         function formatPhoneNumber(phone) {
-            phone = phone.replace(/[^\d]/g, ''); // Удаляем все символы, кроме цифр
-            
-            // Если номер начинается с 9, добавляем +7
+            phone = phone.replace(/[^\d]/g, ''); // Убираем все символы кроме цифр
+
+            // Если телефон начинается с 9, автоматически добавляем +7
             if (phone.startsWith('9')) {
                 phone = '+7' + phone;
-            }
-            // Если номер начинается с 8, заменяем на +7
+            } 
+            // Если начинается с 8, меняем на +7
             else if (phone.startsWith('8')) {
                 phone = '+7' + phone.slice(1);
             }
@@ -72,45 +71,42 @@
             return phone;
         }
 
-        // Применяем маску на начальном этапе
+        // Инициализация маски на начальном этапе
         applyPhoneMask();
 
-        // Применяем маску при вводе данных
-        document.getElementById('phone').addEventListener('input', applyPhoneMask);
-
-        // Обработка отправки формы
+        // Обработчик отправки формы
         document.getElementById('donateForm').addEventListener('submit', function(event) {
-            event.preventDefault();
+            event.preventDefault(); // Отключаем стандартное действие отправки формы
 
             let name = document.getElementById('name').value;
             let email = document.getElementById('email').value;
             let phone = document.getElementById('phone').value;
 
-            // Удаляем все лишние символы из телефона перед проверкой
+            // Удаляем все символы кроме цифр для проверки
             phone = phone.replace(/[^\d]/g, '');
 
-            // Форматируем телефон в нужный формат
+            // Приводим телефон в нужный формат
             phone = formatPhoneNumber(phone);
 
-            // Проверка телефона на соответствие формату +7-999-999-99-99
+            // Проверяем формат телефона
             const phonePattern = /^\+7\d{10}$/;
             if (!phonePattern.test(phone)) {
                 alert('Введите корректный телефон в формате +7 (999) 999-99-99 или 8 (999) 999-99-99');
                 return;
             }
 
-            // Проверка email на соответствие формату
+            // Проверка email
             const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailPattern.test(email)) {
                 alert('Введите корректный email');
                 return;
             }
 
-            // Если всё корректно, можно отправлять данные
+            // Если все корректно, отображаем сообщение об успешной отправке
             alert('Форма успешно отправлена! Номер телефона: ' + phone);
         });
 
-        // Применяем маску снова после автозаполнения с задержкой
+        // Применение маски снова при автозаполнении (с задержкой для обработки браузером)
         window.addEventListener('DOMContentLoaded', function () {
             setTimeout(applyPhoneMask, 100);
         });
