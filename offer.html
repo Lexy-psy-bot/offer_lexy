@@ -52,6 +52,7 @@
             if (!phonePattern.test(phone)) {
                 alert('Введите корректный телефон в формате +7-xxx-xxx-xx-xx');
                 document.getElementById('phone').value = '';  // Очищаем поле телефона после ошибки
+                document.getElementById('phone').focus();  // Устанавливаем фокус на поле телефона
                 return;
             }
 
@@ -59,6 +60,8 @@
             const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailPattern.test(email)) {
                 alert('Введите корректный email');
+                document.getElementById('email').value = '';  // Очищаем поле email после ошибки
+                document.getElementById('email').focus();  // Устанавливаем фокус на поле email
                 return;
             }
 
