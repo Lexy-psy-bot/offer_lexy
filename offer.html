@@ -51,6 +51,7 @@
             const phonePattern = /^\+7-\d{3}-\d{3}-\d{2}-\d{2}$/;
             if (!phonePattern.test(phone)) {
                 alert('Введите корректный телефон в формате +7-xxx-xxx-xx-xx');
+                document.getElementById('phone').value = '';  // Очищаем поле телефона после ошибки
                 return;
             }
 
